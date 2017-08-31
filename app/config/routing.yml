@@ -1,0 +1,24 @@
+fos_js_routing:
+    resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
+
+app:
+    resource: '@AppBundle/Controller/'
+    type: annotation
+
+data:
+    path:     /data
+    defaults: { _controller: AppBundle:Default:data }
+    requirements:
+        methods: get
+
+edit:
+    path:     /{id}
+    defaults: { _controller: AppBundle:Default:edit }
+    requirements:
+        methods: GET
+
+delete:
+    path:     /delete/{id}
+    defaults: { _controller: AppBundle:Default:delete }
+    requirements:
+        methods: POST

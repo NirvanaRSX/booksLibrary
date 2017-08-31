@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="libApp">
+<head>
+    <meta charset="UTF-8"/>
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    {% block stylesheets %}
+        {% stylesheets '@AppBundle/Resources/public/js/node_modules/angular-loading-bar/src/loading-bar.css' %}
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+            <link rel="stylesheet" href="{{ asset_url }}"/>
+        {% endstylesheets %}
+    {% endblock %}
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
+</head>
+<body ng-controller="booksLib">
+{% block body %}
+    <div class="container">
+        {{ form_start(form, { 'attr' : { 'class': 'form-group' } }) }}
+        {{ form_widget(form) }}
+        <input type="submit" value="submit" ng-click="submitForm()">
+        {{ form_end(form) }}
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-2">
+                    Search: <input ng-model="query">
+                </div>
+                <div class="col-md-10">
+                </div>
+            </div>
+        </div>
+        <table class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <th>id</th>
+                <th ng-click="sort('title')">title
+                    <span class="glyphicon sort-icon" ng-show="sortKey=='title'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                </th>
+                <th ng-click="sort('author')">author
+                    <span class="glyphicon sort-icon" ng-show="sortKey=='author'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                </th>
+                <th>year</th>
+                <th>desc</th>
+                <th>cover</th>
+                <th>edit</th>
+                <th>delete</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr  dir-paginate="book in books|orderBy:sortKey:reverse|filter:query|itemsPerPage:5">
+                <td>[[book.id]]</td>
+                <td>[[book.title]]</td>
+                <td>[[book.author]]</td>
+                <td>[[book.year]]</td>
+                <td>[[book.description]]</td>
+                <td>
+                    <img ng-src="[[book.image]]">
+                </td>
+                <td><a href="/[[book.id]]">Редактировать</a></td>
+                <td><a href="/delete/[[book.id]]">Удалить</a></td>
+            </tr>
+            </tbody>
+        </table>
+        <dir-pagination-controls
+                max-size="5"
+                direction-links="true"
+                boundary-links="true" >
+        </dir-pagination-controls>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {% javascripts
+    '@AppBundle/Resources/public/js/node_modules/angular/angular.min.js'
+    '@AppBundle/Resources/public/js/node_modules/angular-loading-bar/src/loading-bar.js'
+    '@AppBundle/Resources/public/js/node_modules/angular-utils-pagination/dirPagination.js'
+    '@AppBundle/Resources/public/js/controllers.js'%}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+</body>
+</html>
